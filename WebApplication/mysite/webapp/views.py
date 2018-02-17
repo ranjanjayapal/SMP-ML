@@ -16,24 +16,27 @@ def index(request):
     val = int(request.body)
     #print(val)
     # list_of_companies = ["INFY", "GOOGL", "AAPL", "MSFT", "TCS", "AMZN"]
-    list_of_companies = ["TITAN"]#,"SBIN","HINDUNILVR","MARUTI"
+    list_of_companies = ["TITAN","SBIN","HINDUNILVR","MARUTI"]#,"SBIN","HINDUNILVR","MARUTI"
     lst_for_result = []
     for company in list_of_companies:
+        #dict_rep_fig2
+        # data, dict_rep, dict_rep_fig2 = get_data(company)
         data, dict_rep = get_data(company)
         print("Got Data from "+company)
         if (data['close'][len(data['close'])-1])>val:
             continue
         # print(data)
-        result = get_json_data(data, company, dict_rep )
+        # result = get_json_data(data, company, dict_rep, dict_rep_fig2 )
+        result = get_json_data(data, company, dict_rep)
         lst_for_result.append(result)
-    get_sector_performance()
+    # get_sector_performance()
     json_data = json.dumps(lst_for_result)
     return HttpResponse(json_data, content_type="application/json")
 
 def get_data(company):
     data, dict_rep = get_daily_data(company)
-    get_intraday(company)
-    return data, dict_rep
+    # dict_rep_fig2 = get_intraday(company)
+    return data, dict_rep #dict_rep_fig2
 
 # def get_daily_data(company):
 #     '''Data retrieval from the stock market using Alpha Vantage API for intraday and daily time series'''
@@ -96,19 +99,27 @@ def get_intraday(company):
     '''Data retrieval from the stock market using Alpha Vantage API for intraday and daily time series'''
     plt.close()
     ts = TimeSeries(key='EZ3UZE4SWE1JI2A9', output_format='pandas')
-    data, meta_data = ts.get_intraday(symbol=company, interval= "15min", outputsize="compact")
+    data, meta_data = ts.get_intraday(symbol=company, interval= "1min", outputsize="full")
     fig_size = plt.rcParams["figure.figsize"]
     fig_size[0] = 12
     fig_size[1] = 5
     plt.rcParams["figure.figsize"] = fig_size
-    data['close'].plot()
-    plt.title('Intraday Times Series for the ' + company + ' stock (15 min)')
+    fig, ax = plt.subplots()
+    ax.plot(data.index, data['close'])
+    # data['close'].plot()
+    ax.set_title('Intraday Times Series for the ' + company + ' stock (15 min)')
+    ax.set_xticklabels(data.index, rotation=90, ha='left', fontsize=10)
+    # dictionary_rep = mpld3.fig_to_dict(fig)
+    # data['close'].plot()
+    # plt.title('Intraday Times Series for the ' + company + ' stock (1 min)')
+    dictionary_rep = mpld3.fig_to_dict(fig)
     # fig.autofmt_xdate()
     # ax.fmt_xdata = mdates.DateFormatter('%Y-%m-%d')
     # plt.savefig("/Users/rjmac/Desktop/SahanaMD_Project/FrontEnd/src/assets/"+company+ "_intraday.png", dpi=1000)
     plt.close()
     # plt.show()
     '''Data retrieval complete'''
+    return dictionary_rep
 
 def get_sector_performance():
     plt.close()
@@ -118,16 +129,23 @@ def get_sector_performance():
     fig_size[0] = 12
     fig_size[1] = 5
     plt.rcParams["figure.figsize"] = fig_size
-    data['Rank A: Real-Time Performance'].plot(kind='bar')
-    plt.title('Real Time Performance (%) per Sector')
+    # data['Rank A: Real-Time Performance'].plot(kind='bar')
+    # plt.title('Real Time Performance (%) per Sector')
+    # fig, ax = plt.subplots()
+    # ax.plot(data.index, data['Rank A: Real-Time Performance'], kind='bar')
+    data['close'].plot()
     plt.tight_layout()
     plt.grid()
+    # ax.set_title('Real Time Performance (%) per Sector')
+    # ax.set_xticklabels(data.index, rotation=90, ha='left', fontsize=10)
+    # dictionary_rep = mpld3.fig_to_dict(fig)
     # plt.savefig("/Users/rjmac/Desktop/SahanaMD_Project/FrontEnd/src/assets/sector_performance.png", dpi=1000)
     # with open("/Users/rjmac/Desktop/SahanaMD_Project/Angular_Part/src/assets/sector_performance.png", "rb") as imageFile:
     #     str = base64.b64encode(imageFile.read())
     #     print (str)
     plt.close()
-
+    # return dictionary_rep
+# def get_json_data(data,company, dict_rep, dict_rep_fig2):
 def get_json_data(data,company, dict_rep):
     # print(company+ ": " + html_string_daily)
     result = {}
@@ -142,4 +160,6 @@ def get_json_data(data,company, dict_rep):
     result['daily_image'] = "../../assets/"+company+"_daily.png"
     result['sector_image'] = "../../assets/sector_performance.png"
     result['dict_rep'] = dict_rep
+    result['dataFrame'] = data.to_json(orient='split')
+    # result['dict_rep_fig2'] = dict_rep_fig2
     return result

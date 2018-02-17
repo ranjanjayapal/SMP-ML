@@ -1,0 +1,57 @@
+<ngx-loading [show]="loading" [config]="{ fullScreenBackdrop: true }"></ngx-loading>
+<div>
+<div class="container">
+<div class="row">
+  <div class="col-xs-12 col-sm-10 col-md-8  ">
+    <ul class="nav nav-tabs">
+      <li role="presentation" class="btn"><a routerLink="/list">List</a></li>
+    </ul>
+  </div>
+</div>
+<div xmlns="" xmlns="">
+  <div class="list-group">
+    <a class="list-group-item"
+       *ngFor="let company_name of company_names; let i = index"
+       (click)="show_stockprice(i)">
+      {{company_name}}
+    </a>
+  </div>
+</div>
+<p>The current Stock Price of the company as of today is: {{show_current_stock_closing_price}} Rupees</p>
+<!--<p>Date: {{ show_current_date}}</p>-->
+<p>Open: {{show_current_stock_opening_price}}</p>
+<p>High: {{show_current_stock_highest_price}}</p>
+<p>Low: {{show_current_stock_lowest_price}}</p>
+<p>Close: {{show_current_stock_closing_price}}</p>
+<p>Volume: {{show_current_stock_volume}}</p>
+<p>Path_intraday: {{show_current_stock_intraday}}</p>
+
+<div class="col-sm-15">
+  <h4>Daily Graph: </h4>
+  <!--*ngIf="show_current_stock_sector != ''"-->
+  <!--<img [src] = "show_current_stock_sector" width="110%" height="25%"/>-->
+   <!--<img src="../../../../WebApplication/mysite/google_wallpaper.jpg" />-->
+  <svg width="900" height="500"></svg>
+</div>
+</div>
+<button *ngIf="svg" class="btn btn-success" style="margin: auto; margin-bottom: 10%; margin-top: 5%" routerLink="/prediction" (click)="pass_data_prediction()">Predict The Future of {{clicked_company_name}}</button>
+</div>
+  <!--<div class="col-sm-15">-->
+  <!--<h4>Intraday Graph: </h4>-->
+  <!--&lt;!&ndash;*ngIf="show_current_stock_intraday != ''"&ndash;&gt;-->
+  <!--&lt;!&ndash;<img [src] = "show_current_stock_intraday" width="110%" height="25%" />&ndash;&gt;-->
+  <!--&lt;!&ndash;<img src={{show_current_stock_intraday}}>&ndash;&gt;-->
+  <!--<svg id="qwerty" width="900" height="500"></svg>-->
+<!--</div>-->
+<!--<div class="col-sm-15">-->
+  <!--<h4>Sector Performance: </h4>-->
+  <!--&lt;!&ndash;<img [src] = "show_current_stock_daily" width="110%" height="25%" />&ndash;&gt;-->
+  <!--&lt;!&ndash;<img src={{show_current_stock_daily}}>&ndash;&gt;-->
+  <!--<svg id="qwerty1" width="900" height="500"></svg>-->
+<!--</div>-->
+<!--<div [innerHtml]="html_code">-->
+  <!--&lt;!&ndash;<p>HELO!!!</p>&ndash;&gt;-->
+  <!--&lt;!&ndash;<iframe [src] = "iframe"></iframe>&ndash;&gt;-->
+<!--</div>-->
+<!--<div [innerHTML]="show_html_string"></div>-->
+<!--<p>HTML STRING: {{show_html_string}}</p>-->
