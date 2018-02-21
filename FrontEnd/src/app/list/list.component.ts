@@ -55,6 +55,7 @@ export class ListComponent implements OnInit {
   y_axis_ticks_fig2 = [];
   x_axis_ticks_fig2 = [];
   arr_data_fig2 = [];
+  noYears = 0;
   data_object_fig2: any;
   private margin = {top: 20, right: 20, bottom: 30, left: 50};
   private width: number;
@@ -109,6 +110,7 @@ export class ListComponent implements OnInit {
     // this.show_dict_rep_fig2 = this.dict_rep_fig2[index];
     // this.show_dict_rep_fig3 = this.dict_rep_fig3[index];
     // console.log(this.show_dict_rep);
+    // this.createChart();
     this.prepare_fig1();
     this.initSvg_fig1();
     this.initAxis_fig1();
@@ -130,6 +132,7 @@ export class ListComponent implements OnInit {
     this.svg = d3.select("svg")
       .append("g")
       .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+
   }
 
   private prepare_fig1() {
@@ -264,7 +267,12 @@ export class ListComponent implements OnInit {
       .attr("d", this.line2);
   }
   pass_data_prediction() {
-    this.data.predictionServers(this.dataFrames[this.clickedCompanyNameIndex]).subscribe(
+    const map = new Object(); // or var map = {};
+    map['data'] = this.dataFrames[this.clickedCompanyNameIndex];
+    map['years'] = this.noYears;
+    // arr.push(this.dataFrames[this.clickedCompanyNameIndex]);
+    // arr.push(this.noYears);
+    this.data.predictionServers(map).subscribe(
       (response) => { console.log(response.json());
       const jsonResult = response.json();
       jsonResult['CompanyName'] = this.clicked_company_name;

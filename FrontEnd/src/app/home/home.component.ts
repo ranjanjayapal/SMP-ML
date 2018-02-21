@@ -19,10 +19,6 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.serverService.currentMessage.subscribe(message => {this.message = message;
       console.log(message); });
-    this.createChart();
-  }
-  createChart() {
-    d3.select('p').style('color', 'red');
   }
   onSave() {
     this.serverService.storeServers(this.investment_limit).subscribe(

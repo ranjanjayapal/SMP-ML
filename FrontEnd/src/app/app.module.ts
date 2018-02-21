@@ -10,6 +10,7 @@ import {HttpModule} from '@angular/http';
 import {FormsModule} from '@angular/forms';
 import { PredictionComponent } from './prediction/prediction.component';
 import { LoadingModule } from 'ngx-loading';
+import {DropdownModule} from "ngx-dropdown";
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'list', component: ListComponent},
@@ -28,6 +29,7 @@ const appRoutes: Routes = [
     HttpModule,
     FormsModule,
     LoadingModule,
+    DropdownModule,
     RouterModule.forRoot(appRoutes),
   ],
   providers: [ServerService],

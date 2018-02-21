@@ -32,6 +32,7 @@
     "core-js": "^2.4.1",
     "d3": "^4.12.2",
     "ng4-loading-spinner": "^1.1.1",
+    "ngx-dropdown": "0.0.22",
     "ngx-loading": "^1.0.14",
     "rxjs": "^5.4.2",
     "zone.js": "^0.8.14"

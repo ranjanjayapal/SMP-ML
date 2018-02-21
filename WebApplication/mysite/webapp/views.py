@@ -12,7 +12,7 @@ import base64
 # Create your views here.
 @csrf_exempt
 def index(request):
-    print(request.body)
+    # print(request.body)
     val = int(request.body)
     #print(val)
     # list_of_companies = ["INFY", "GOOGL", "AAPL", "MSFT", "TCS", "AMZN"]
