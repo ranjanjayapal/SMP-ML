@@ -1,0 +1,22 @@
+<head>
+    <script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+</head>
+
+<h2 align="center">Welcome to the Stock Market Prediction GUI</h2>
+<p>This has been coded on Angular 5.0. As I plan to show how the visualization looks on a GUI I am writing this on Angular.
+Once I am done with the predictive analysis and the predictive model, I will implement that in a web framework such as Django on the back end and all the computation will happen on the backend. Right now we are using Django to compute and get the
+stock market's data. All the Data has then been converted to a JSON file to be retrieved by angular. All of the work has then been used as an API for Angular to display the content.</p>
+
+<h3 align="center"> LET'S BEGIN </h3>
+
+<p style="font-weight: bold">Investment Limit: </p>
+<div>
+  <input name = "form_input" class="form-control" style="display: inline-block;width: 200px" type="number" [(ngModel)]="investment_limit" required>
+  <button class="btn btn-success" style="display: inline-block" routerLink="/list" (click)="onSave()">Use this as limit</button>
+</div>
+<!--<button class ="btn btn-default" (click)="onSave()">Connect to Server!</button>-->
+<body>
+<script>
+    d3.selectAll('p').style('color', 'red');
+</script>
+</body>

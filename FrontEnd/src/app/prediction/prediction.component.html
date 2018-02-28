@@ -1,12 +1,13 @@
+<ngx-loading [show]="loading" [config]="{ fullScreenBackdrop: true }"></ngx-loading>
 <div class="container">
 <div class="row">
   <div class="col-xs-12 col-sm-10 col-md-8  ">
     <ul class="nav nav-tabs">
-      <li role="presentation" class="btn"><a routerLink="/list">List</a></li>
+      <li role="presentation" class="btn"><a routerLink="/list" (click)="clear()">List</a></li>
     </ul>
   </div>
 </div>
-<h2 align="center">
+<h2>
   Prediction for {{companyName}}!
 </h2>
   <h4 style="margin-top: 10%">
@@ -15,5 +16,7 @@
   <h4 style="margin-top: 10%">
     Stock Price of {{companyName}} in {{predictedYear}} will be <span>{{predictedValue}}</span>
   </h4>
+  <img *ngIf="predictedValue" src = "data:image/png;base64,{{graph}}">
+  <!--<button *ngIf="predictedValue" class="btn btn-default" (click)="showgraph()">Get Prediction Graph</button>-->
   <!--<svg width="900" height="500"></svg>-->
 </div>

@@ -12,15 +12,17 @@ import * as d3Axis from 'd3-axis';
   styleUrls: ['./prediction.component.css']
 })
 export class PredictionComponent implements OnInit {
-
+  public loading = true;
   companyName = '';
   closingValue = '';
   predictedValue = '';
   predictedYear = '';
   predictedGraph = '';
+  graph = '';
   constructor(private data: ServerService) { }
-  y_axis_ticks_fig1 = [];
-  x_axis_ticks_fig1 = [];
+  y_axis_ticks_line1 = [];
+  y_axis_ticks_line2 = [];
+  x_axis_ticks = [];
   arr_data_fig1 = [];
   data_object_fig1: any;
   private margin = {top: 20, right: 20, bottom: 30, left: 50};
@@ -36,20 +38,40 @@ export class PredictionComponent implements OnInit {
   private line2: d3Shape.Line<[number, number]>;
   ngOnInit() {
     this.data.prediction_message.subscribe(predictionMessage => {
+      if (predictionMessage['CompanyName']) {
+        this.loading = false;
+      }
       this.companyName = predictionMessage['CompanyName'];
       this.closingValue = predictionMessage['ClosingPrice'];
       this.predictedValue = predictionMessage['predictedValue'];
       this.predictedYear = predictionMessage['yearPredicted'];
+      this.graph = predictionMessage['predictionGraph'];
       // this.predictedGraph = predictionMessage['predictionGraph'];
       console.log('PredictedValue: ' + predictionMessage['predictedValue']);
       console.log('CompanyName: ' + predictionMessage['CompanyName']);
       console.log('ClosingPrice: ' + predictionMessage['ClosingPrice']);
-      // this.prepare_fig1();
-      // this.initSvg_fig1();
-      // this.initAxis_fig1();
-      // this.drawAxis_fig1();
-      // this.drawLine_fig1();
+      console.log(predictionMessage['predictionGraph']);
+      // if (this.predictedValue !== '') {
+      //   this.loading = false;
+      // }
     } );
+  }
+  clear() {
+    console.log('Inside Clear');
+    this.data.changePredictionMessage('');
+    this.loading = true;
+    this.companyName = '';
+    this.closingValue = '';
+    this.predictedValue = '';
+    this.predictedYear = '';
+    this.graph = '';
+  }
+  showgraph() {
+    this.prepare_fig1();
+    this.initSvg_fig1();
+    this.initAxis_fig1();
+    this.drawAxis_fig1();
+    this.drawLine_fig1();
   }
   private initSvg_fig1() {
     d3.selectAll("svg > *").remove();
@@ -60,27 +82,31 @@ export class PredictionComponent implements OnInit {
   }
 
   private prepare_fig1() {
-    const json_string = JSON.stringify(this.predictedGraph);
+    const json_string = JSON.stringify(this.graph);
     // console.log(json_string);
     const json_rep = JSON.parse(json_string);
     // console.log(json_rep.axes[0].axes[0].tickformat);
-    this.x_axis_ticks_fig1 = json_rep.axes[0].axes[0].tickformat;
-    // console.log(json_rep.data.data01);
+    // this.x_axis_ticks = json_rep.axes[0].axes[0].tickformat;
+    console.log(json_rep.data.data01);
     for (let i = 0; i < json_rep.data.data01.length; i++) {
-      this.y_axis_ticks_fig1[i] = json_rep.data.data01[i][1];
+      this.x_axis_ticks[i] = json_rep.data.data01[i][0];
+      this.y_axis_ticks_line1[i] = json_rep.data.data01[i][1];
+      this.y_axis_ticks_line2[i] = json_rep.data.data01[i][2];
       // console.log(json_rep.data.data01[i][1]);
     }
-    const parseTime = d31.timeParse("%Y-%m-%d");
-    console.log(this.y_axis_ticks_fig1);
-    console.log(this.x_axis_ticks_fig1);
+    // const parseTime = d31.timeParse("%Y-%m-%d");
+    console.log(this.y_axis_ticks_line1);
+    console.log(this.y_axis_ticks_line2);
+    console.log(this.x_axis_ticks);
     for (let i = 0; i < json_rep.data.data01.length; i++) {
-      this.arr_data_fig1[i] = [this.x_axis_ticks_fig1[i], this.y_axis_ticks_fig1[i]];
+      this.arr_data_fig1[i] = [this.x_axis_ticks[i], this.y_axis_ticks_line1[i], this.y_axis_ticks_line2[i]];
     }
     console.log(this.arr_data_fig1);
     this.data_object_fig1 = this.arr_data_fig1.map(function(d) {
       return {
-        date: parseTime(d[0]),
-        value: d[1]
+        date: d[0],
+        value1: d[1],
+        value2: d[2]
       };
     });
   }
@@ -113,11 +139,17 @@ export class PredictionComponent implements OnInit {
   private drawLine_fig1() {
     this.line = d3Shape.line()
       .x( (d: any) => this.x(d.date) )
-      .y( (d: any) => this.y(d.value) );
+      .y( (d: any) => this.y(d.value1) );
+
+    this.line2 = d3Shape.line()
+      .x( (d: any) => this.x(d.date) )
+      .y( (d: any) => this.y(d.value2) );
 
     this.svg.append("path")
       .datum(this.data_object_fig1)
       .attr("class", "line")
-      .attr("d", this.line);
+      .attr("d", this.line)
+      .attr("class", "line")
+      .attr("d", this.line2);
   }
 }

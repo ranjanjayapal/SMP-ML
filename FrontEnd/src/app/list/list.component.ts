@@ -70,6 +70,7 @@ export class ListComponent implements OnInit {
   private line2: d3Shape.Line<[number, number]>;
   constructor(private data: ServerService, private sanitizer: DomSanitizer) { }
   ngOnInit() {
+
     this.loading = true;
     this.data.currentMessage.subscribe(message => {this.messages = message;
     // this.showSpinner = false;
@@ -146,7 +147,7 @@ export class ListComponent implements OnInit {
       this.y_axis_ticks_fig1[i] = json_rep.data.data01[i][1];
       // console.log(json_rep.data.data01[i][1]);
     }
-    const parseTime = d31.timeParse("%Y-%m-%d");
+    const parseTime = d31.timeParse("%Y-%m-%d %H:%M:%S");
     console.log(this.y_axis_ticks_fig1);
     console.log(this.x_axis_ticks_fig1);
     for (let i = 0; i < json_rep.data.data01.length; i++) {
@@ -163,8 +164,8 @@ export class ListComponent implements OnInit {
   private initAxis_fig1() {
     this.x = d3Scale.scaleTime().range([0, this.width]);
     this.y = d3Scale.scaleLinear().range([this.height, 0]);
-    this.x.domain(d3Array.extent(this.data_object_fig1, (d: any) => d.date ));
-    this.y.domain(d3Array.extent(this.data_object_fig1, (d: any) => d.value ));
+    this.x.domain(d3Array.extent(this.data_object_fig1, (d: any) => new Date(d.date)) );
+    this.y.domain(d3Array.extent(this.data_object_fig1, (d: any) => +d.value ));
   }
 
   private drawAxis_fig1() {
@@ -188,8 +189,8 @@ export class ListComponent implements OnInit {
 
   private drawLine_fig1() {
     this.line = d3Shape.line()
-      .x( (d: any) => this.x(d.date) )
-      .y( (d: any) => this.y(d.value) );
+      .x( (d: any) => this.x(new Date(d.date)) )
+      .y( (d: any) => this.y(+d.value) );
 
     this.svg.append("path")
       .datum(this.data_object_fig1)
@@ -224,7 +225,7 @@ export class ListComponent implements OnInit {
     console.log(this.arr_data_fig2);
     this.data_object_fig2 = this.arr_data_fig2.map(function(d) {
       return {
-        date: parseTime(d[0]),
+        date: parseTime(new Date(d[0])),
         value: d[1]
       };
     });
@@ -234,7 +235,7 @@ export class ListComponent implements OnInit {
     this.x2 = d3Scale.scaleTime().range([0, this.width]);
     this.y2 = d3Scale.scaleLinear().range([this.height, 0]);
     this.x2.domain(d3Array.extent(this.data_object_fig2, (d: any) => d.date ));
-    this.y2.domain(d3Array.extent(this.data_object_fig2, (d: any) => d.value ));
+    this.y2.domain(d3Array.extent(this.data_object_fig2, (d: any) => +d.value ));
   }
 
   private drawAxis_fig2() {
@@ -259,7 +260,7 @@ export class ListComponent implements OnInit {
   private drawLine_fig2() {
     this.line2 = d3Shape.line()
       .x( (d: any) => this.x2(d.date) )
-      .y( (d: any) => this.y2(d.value) );
+      .y( (d: any) => this.y2(+d.value) );
 
     this.dv.append("path")
       .datum(this.data_object_fig2)
@@ -270,6 +271,7 @@ export class ListComponent implements OnInit {
     const map = new Object(); // or var map = {};
     map['data'] = this.dataFrames[this.clickedCompanyNameIndex];
     map['years'] = this.noYears;
+    map['CompanyName'] = this.clicked_company_name;
     // arr.push(this.dataFrames[this.clickedCompanyNameIndex]);
     // arr.push(this.noYears);
     this.data.predictionServers(map).subscribe(
