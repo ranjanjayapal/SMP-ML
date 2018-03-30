@@ -37,17 +37,36 @@ def predict(request):
     dates = []
     prices = []
     lst_for_result = []
-    predictionYear = now.year + int(data["years"])
-    # print(df.index)
-    for i in df.index:
-        # print(str(i).split()[0].split('-')[2])
-        dates.append(int(str(i).split()[0].split('-')[0]))
-    for j in df['Close']:
-        prices.append(float(str(j)))
+    predictionYear = 0
+    predictionType = data["pred_type"]
+    if(predictionType == 'Years'):
+        predictionYear = now.year + int(data["years"])
+        # print(df.index)
+        for i in df.index:
+            # print(str(i).split()[0].split('-')[2])
+            dates.append(int(str(i).split()[0].split('-')[0]))
+        for j in df['Close']:
+            prices.append(float(str(j)))
+
+    if (predictionType == 'Months'):
+        predictionYear = int(data["months"])
+        # print(df.index)
+        for i in df.index:
+            # print(str(i).split()[0].split('-')[2])
+            dates.append(int(str(i).split()[0].split('-')[1]))
+        for j in df['Close']:
+            prices.append(float(str(j)))
+    # predictionYear = now.year + int(data["years"])
+    # for i in df.index:
+    #     # print(str(i).split()[0].split('-')[2])
+    #     dates.append(int(str(i).split()[0].split('-')[0]))
+    # for j in df['Close']:
+    #     prices.append(float(str(j)))
     dates = np.reshape(dates, (len(dates), 1))
     svr_rbf = SVR(kernel='rbf', C=1e3, gamma=0.1)
     svr_rbf.fit(dates, prices)
     predictedValue = svr_rbf.predict(predictionYear)
+
     share = bb.Share(source='NSE', ticker=data["CompanyName"])
     Xtrain, Xtest, ytrain, ytest = split(share, 'Close', normalize=True)
     Xtrain = pd.DataFrame(Xtrain)

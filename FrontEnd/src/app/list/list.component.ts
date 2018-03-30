@@ -16,7 +16,8 @@ import * as d3Axis from 'd3-axis';
   styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
-  public loading = false;
+  public loading = true;
+  public val = 0;
   clicked_company_name = '';
   clickedCompanyNameIndex;
   messages: any;
@@ -56,6 +57,9 @@ export class ListComponent implements OnInit {
   x_axis_ticks_fig2 = [];
   arr_data_fig2 = [];
   noYears = 0;
+  noMonths = 0;
+  noDays = 0;
+  prediction_for = 'Choose';
   data_object_fig2: any;
   private margin = {top: 20, right: 20, bottom: 30, left: 50};
   private width: number;
@@ -70,12 +74,20 @@ export class ListComponent implements OnInit {
   private line2: d3Shape.Line<[number, number]>;
   constructor(private data: ServerService, private sanitizer: DomSanitizer) { }
   ngOnInit() {
-
+    this.val = 0;
     this.loading = true;
     this.data.currentMessage.subscribe(message => {this.messages = message;
     // this.showSpinner = false;
       for (let i of message){
         this.loading = false;
+        // const loadleft = document.getElementsByClassName('loader-section.section-left') as HTMLCollectionOf<HTMLElement>;;
+        // const loadright = document.getElementsByClassName('loader-section.section-right') as HTMLCollectionOf<HTMLElement>;;
+        // for (i in loadleft) {
+        //   i.style.cssText = 'visibility:hidden;';
+        // }
+        // const el = document.getElementById('loader-wrapper');
+        // el.setAttribute("style", "visibility: hidden;");
+        this.val = 1;
         this.company_names.push(i['company_name']);
         this.stock_closing_price.push(i['closing_price']);
         this.stock_opening_price.push(i['opening_price']);
@@ -269,19 +281,25 @@ export class ListComponent implements OnInit {
   }
   pass_data_prediction() {
     const map = new Object(); // or var map = {};
+    map['pred_type'] = this.prediction_for;
+    if (this.prediction_for === 'Years') {
+      map['years'] = this.noYears;
+    }else if (this.prediction_for === 'Months') {
+      map['months'] = this.noMonths;
+    }
     map['data'] = this.dataFrames[this.clickedCompanyNameIndex];
-    map['years'] = this.noYears;
+    // map['years'] = this.noYears;
     map['CompanyName'] = this.clicked_company_name;
     // arr.push(this.dataFrames[this.clickedCompanyNameIndex]);
     // arr.push(this.noYears);
     this.data.predictionServers(map).subscribe(
       (response) => { console.log(response.json());
-      const jsonResult = response.json();
-      jsonResult['CompanyName'] = this.clicked_company_name;
-      jsonResult['ClosingPrice'] = this.show_current_stock_closing_price;
-      this.data.changePredictionMessage(jsonResult);
+        const jsonResult = response.json();
+        jsonResult['CompanyName'] = this.clicked_company_name;
+        jsonResult['ClosingPrice'] = this.show_current_stock_closing_price;
+        this.data.changePredictionMessage(jsonResult);
       },
       (error) => console.log(error)
-      );
+    );
   }
 }

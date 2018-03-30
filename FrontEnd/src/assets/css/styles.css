@@ -1,5 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
-
+html{
+  min-height: 100%;
+}
+body{
+  background: linear-gradient(to top, #336699 0%, #ffffff 100%);
+}
 .axis {
   font: 10px sans-serif;
 }
@@ -7,13 +12,13 @@
 .axis path,
 .axis line {
   fill: none;
-  stroke: blue;
+  stroke: green;
   shape-rendering: crispEdges;
 }
 
 .axis-title {
   fill: none;
-  stroke: blue;
+  stroke: green;
   stroke-width: 0.5px;
 }
 
@@ -24,7 +29,7 @@
 
 .line {
   fill: none;
-  stroke: steelblue;
+  stroke: darkgreen;
   stroke-width: 1.5px;
 }
 

@@ -1,8 +1,15 @@
-<ngx-loading [show]="loading" [config]="{ fullScreenBackdrop: true }"></ngx-loading>
+<!--<ngx-loading [show]="loading" [config]="{ fullScreenBackdrop: true }"></ngx-loading>-->
+<body [ngClass]="{'loaded': val === 1}">
+<!--<h3>Getting Data Using Quandl API. Please Wait..</h3>-->
+<div id="loader-wrapper">
+  <div id="loader"></div>
+  <div class="loader-section section-left"></div>
+  <div class="loader-section section-right"></div>
+</div>
 <div>
 <div class="container">
 <div class="row">
-  <div class="col-xs-12 col-sm-10 col-md-8  ">
+  <div class="col-xs-5 col-sm-5 ">
     <ul class="nav nav-tabs">
       <li role="presentation" class="btn"><a routerLink="/list">List</a></li>
     </ul>
@@ -26,34 +33,66 @@
 <p>Volume: {{show_current_stock_volume}}</p>
 <p>Path_intraday: {{show_current_stock_intraday}}</p>
 
-<div class="col-sm-15">
+<div class="col-sm-7">
   <h4>Daily Graph: </h4>
   <!--*ngIf="show_current_stock_sector != ''"-->
   <!--<img [src] = "show_current_stock_sector" width="110%" height="25%"/>-->
    <!--<img src="../../../../WebApplication/mysite/google_wallpaper.jpg" />-->
-  <svg width="900" height="500"></svg>
+  <svg width="800" height="500"></svg>
 </div>
 </div>
-  <div *ngIf="svg" class="container" style="display: inline-block; margin-bottom: 20%; margin-top: 5%">
+  <div *ngIf="svg" class="container" style="display: inline-block; margin-bottom: 5%; margin-top: 5%">
+    <p><b> Predict in </b></p>
+    <div class="dropdown" dropdown [dropdownToggle]="false">
+      <button class="btn btn-primary" dropdown-open>{{prediction_for}}</button>
+      <ul class="dropdown-menu">
+        <li><a (click)="prediction_for='Years'">Years</a></li>
+        <li><a (click)="prediction_for='Months'">Months</a></li>
+        <!--<li><a (click)="prediction_for='Days'">Days</a></li>-->
+      </ul>
+    </div>
+  </div>
+  <div *ngIf="prediction_for == 'Years'" class="container" style="display: inline-block;margin-bottom: 15%; margin-top: 5%">
     <p><b>No of Years that needs to be predicted for:</b></p>
-  <div class="dropdown" dropdown [dropdownToggle]="false">
-    <button class="btn btn-primary" dropdown-open>{{noYears}}</button>
-    <ul class="dropdown-menu">
-      <li><a (click)="noYears=1">1</a></li>
-      <li><a (click)="noYears=2">2</a></li>
-      <li><a (click)="noYears=3">3</a></li>
-      <li><a (click)="noYears=4">4</a></li>
-      <li><a (click)="noYears=5">5</a></li>
-      <li><a (click)="noYears=6">6</a></li>
-      <li><a (click)="noYears=7">7</a></li>
-      <li><a (click)="noYears=8">8</a></li>
-      <li><a (click)="noYears=9">9</a></li>
-      <li><a (click)="noYears=10">10</a></li>
-    </ul>
+    <div class="dropdown" dropdown [dropdownToggle]="false">
+      <button class="btn btn-primary" dropdown-open>{{noYears}}</button>
+      <ul class="dropdown-menu">
+        <li><a (click)="noYears=1">1</a></li>
+        <li><a (click)="noYears=2">2</a></li>
+        <li><a (click)="noYears=3">3</a></li>
+        <li><a (click)="noYears=4">4</a></li>
+        <li><a (click)="noYears=5">5</a></li>
+        <li><a (click)="noYears=6">6</a></li>
+        <li><a (click)="noYears=7">7</a></li>
+        <li><a (click)="noYears=8">8</a></li>
+        <li><a (click)="noYears=9">9</a></li>
+        <li><a (click)="noYears=10">10</a></li>
+      </ul>
+    </div>
   </div>
+  <div *ngIf="prediction_for == 'Months'" class="container" style="display: inline-block; margin-bottom: 15%; margin-top: 5%">
+    <p><b>No of months that needs to be predicted for:</b></p>
+    <div class="dropdown" dropdown [dropdownToggle]="false">
+      <button class="btn btn-primary" dropdown-open>{{noMonths}}</button>
+      <ul class="dropdown-menu">
+        <li><a (click)="noMonths=1">1</a></li>
+        <li><a (click)="noMonths=2">2</a></li>
+        <li><a (click)="noMonths=3">3</a></li>
+        <li><a (click)="noMonths=4">4</a></li>
+        <li><a (click)="noMonths=5">5</a></li>
+        <li><a (click)="noMonths=6">6</a></li>
+        <li><a (click)="noMonths=7">7</a></li>
+        <li><a (click)="noMonths=8">8</a></li>
+        <li><a (click)="noMonths=9">9</a></li>
+        <li><a (click)="noMonths=10">10</a></li>
+        <li><a (click)="noMonths=11">11</a></li>
+        <li><a (click)="noMonths=12">12</a></li>
+      </ul>
+    </div>
   </div>
-<button *ngIf="noYears != 0" class="btn btn-success" style="margin: auto; display: inline-block; margin-bottom: 10%; margin-top: 5%" routerLink="/prediction" (click)="pass_data_prediction()">Predict The Future of {{clicked_company_name}}</button>
+<button *ngIf="noYears != 0 || noMonths != 0" class="btn btn-success" style="margin: auto; display: inline-block; margin-bottom: 10%; margin-top: 5%" routerLink="/prediction" (click)="pass_data_prediction()">Predict The Future of {{clicked_company_name}}</button>
 </div>
+<!--</div>-->
   <!--<div class="col-sm-15">-->
   <!--<h4>Intraday Graph: </h4>-->
   <!--&lt;!&ndash;*ngIf="show_current_stock_intraday != ''"&ndash;&gt;-->
@@ -73,3 +112,4 @@
 <!--</div>-->
 <!--<div [innerHTML]="show_html_string"></div>-->
 <!--<p>HTML STRING: {{show_html_string}}</p>-->
+</body>

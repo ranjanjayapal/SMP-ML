@@ -10,8 +10,15 @@ import {any} from 'codelyzer/util/function';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  public val = 0;
+  constructor(private serverService: ServerService) {
+    const that = this;
+    setTimeout(function() {
+      console.log(that.val);
+      that.val = 1;
+    }, 3000);
+  }
 
-  constructor(private serverService: ServerService) { }
   investment_limit = '';
   message: any;
   disable_button = false;

@@ -12,7 +12,8 @@ import * as d3Axis from 'd3-axis';
   styleUrls: ['./prediction.component.css']
 })
 export class PredictionComponent implements OnInit {
-  public loading = true;
+  // public loading = true;
+  public val = 0;
   companyName = '';
   closingValue = '';
   predictedValue = '';
@@ -39,7 +40,8 @@ export class PredictionComponent implements OnInit {
   ngOnInit() {
     this.data.prediction_message.subscribe(predictionMessage => {
       if (predictionMessage['CompanyName']) {
-        this.loading = false;
+        // this.loading = false;
+        this.val = 1;
       }
       this.companyName = predictionMessage['CompanyName'];
       this.closingValue = predictionMessage['ClosingPrice'];
@@ -59,7 +61,8 @@ export class PredictionComponent implements OnInit {
   clear() {
     console.log('Inside Clear');
     this.data.changePredictionMessage('');
-    this.loading = true;
+    // this.loading = true;
+    this.val = 0;
     this.companyName = '';
     this.closingValue = '';
     this.predictedValue = '';
