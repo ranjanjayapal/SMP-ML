@@ -47,12 +47,12 @@ export class PredictionComponent implements OnInit {
       this.closingValue = predictionMessage['ClosingPrice'];
       this.predictedValue = predictionMessage['predictedValue'];
       this.predictedYear = predictionMessage['yearPredicted'];
-      this.graph = predictionMessage['predictionGraph'];
+      // this.graph = predictionMessage['predictionGraph'];
       // this.predictedGraph = predictionMessage['predictionGraph'];
       console.log('PredictedValue: ' + predictionMessage['predictedValue']);
       console.log('CompanyName: ' + predictionMessage['CompanyName']);
       console.log('ClosingPrice: ' + predictionMessage['ClosingPrice']);
-      console.log(predictionMessage['predictionGraph']);
+      // console.log(predictionMessage['predictionGraph']);
       // if (this.predictedValue !== '') {
       //   this.loading = false;
       // }
