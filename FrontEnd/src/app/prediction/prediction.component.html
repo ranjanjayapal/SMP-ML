@@ -22,7 +22,10 @@
   <h4 style="margin-top: 10%">
     Stock Price of {{companyName}} in {{predictedYear}} will be <span>{{predictedValue}}</span>
   </h4>
-  <img *ngIf="predictedValue" src = "data:image/png;base64,{{graph}}">
+  <img *ngIf="predictedValue && companyName == 'TITAN'" src = "../../assets/TITAN_prediction.png">
+  <img *ngIf="predictedValue && companyName == 'SBIN'" src = "../../assets/SBI_prediction.png">
+  <img *ngIf="predictedValue && companyName == 'HDFC'" src = "../../assets/HDFC_prediction.png">
+  <img *ngIf="predictedValue && companyName == 'WIPRO'" src = "../../assets/WIPRO_prediction.png">
   <!--<button *ngIf="predictedValue" class="btn btn-default" (click)="showgraph()">Get Prediction Graph</button>-->
   <!--<svg width="900" height="500"></svg>-->
 </div>
